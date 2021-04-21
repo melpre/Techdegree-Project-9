@@ -6,40 +6,42 @@ module.exports = (sequelize) => {
     class User extends Model {}
     User.init({
         firstName: {
-            type: DataTypes.STRING
-            // allowNull: false,
-            // validate: {
-            //     notNull: {
-            //         msg: "A first name is required"
-            //     },
-            //     notEmpty: {
-            //         msg: "Please provide a first name"
-            //     }
-            // }
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notNull: {
+                    msg: "A first name is required"
+                },
+                notEmpty: {
+                    msg: "Please provide a first name"
+                }
+            }
         },
         lastName: {
-            type: DataTypes.STRING
-            // allowNull: false,
-            // validate: {
-            //     notNull: {
-            //         msg: "A last name is required"
-            //     },
-            //     notEmpty: {
-            //         msg: "Please provide a last name"
-            //     }
-            // }
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notNull: {
+                    msg: "A last name is required"
+                },
+                notEmpty: {
+                    msg: "Please provide a last name"
+                }
+            }
         },
         emailAddress: {
-            type: DataTypes.STRING
-            // allowNull: false,
-            // validate: {
-            //     notNull: {
-            //         msg: "An email address is required"
-            //     },
-            //     notEmpty: {
-            //         msg: "Please provide an email address"
-            //     }
-            // }
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notNull: {
+                    msg: "An email address is required"
+                },
+                notEmpty: {
+                    msg: "Please provide an email address"
+                },
+                isEmail: true, // extra credit: valid email format check
+                unique: true, // extra credit: unique constraint check
+            }
         },
         password: {
             type: DataTypes.STRING
