@@ -4,8 +4,10 @@
 const express = require('express');
 const morgan = require('morgan');
 const { sequelize } = require('./models');
-// const routes = require('./routes'); //add routes
-const { userRoutes, coursesRoutes } = require('./routes'); //add routes (alternative destructuring assignment)
+
+// import route modules
+const userRoutes = require('./routes/userRoutes');
+const coursesRoutes = require('./routes/coursesRoutes');
 
 // variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';

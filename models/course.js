@@ -33,7 +33,7 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING
         },
         materialsNeeded: {
-            type: DataTypes.TEXT
+            type: DataTypes.STRING
         }
     }, { sequelize });
 
@@ -43,7 +43,7 @@ module.exports = (sequelize) => {
             as: 'instructor',
             foreignKey: {
                 fieldName: 'userId',
-                // allowNull: false
+                allowNull: false
             }
         });
     };

@@ -40,11 +40,32 @@ module.exports = (sequelize) => {
                     msg: "Please provide an email address"
                 },
                 isEmail: true, // extra credit: valid email format check
-                unique: true, // extra credit: unique constraint check
+                unique: { // extra credit: unique constraint check
+                    msg: 'The email you entered already exists'
+                }
             }
         },
         password: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notNull: {
+                    msg: 'A password is required'
+                },
+                notEmpty: {
+                    msg: 'Please provide a passoword'
+                },
+                len: {
+                    args: [10, 15],
+                    msg: 'Choose a password that is between 10-15 characters long'
+                },
+            },
+            set(val) {
+                if (val === this.password) {
+                    const hashedPassword = bcrypt.hashSync(val, 10);
+                    this.setDataValue('password', hashedPassword);
+                }
+            }
         }
     }, { sequelize });
 
@@ -54,7 +75,7 @@ module.exports = (sequelize) => {
             as: 'instructor',
             foreignKey: {
                 fieldName: 'userId',
-                // allowNull: false
+                allowNull: false
             }
         });
     };
