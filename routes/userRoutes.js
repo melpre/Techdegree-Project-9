@@ -3,7 +3,6 @@
 const express = require('express');
 const { asyncHandler } = require('../middleware/async-handler'); //import async-handler middleware
 const { authenticateUser } = require('../middleware/auth-user'); // import authentication middleware
-// const bcrypt = require('bcrypt'); //need this to hash passwords
 
 // import User model via index.js in models folder and access its property
 const { User } = require('../models');

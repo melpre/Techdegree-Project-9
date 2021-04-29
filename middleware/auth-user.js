@@ -3,7 +3,7 @@
 // import npm library for basic authentication
 const auth = require('basic-auth');
 // import bcrypt module
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 // import User model via index.js in models folder and access its property
 const { User } = require('../models');
 

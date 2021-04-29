@@ -1,6 +1,6 @@
 'use strict';
 const { Model, DataTypes } = require('sequelize');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 module.exports = (sequelize) => {
     class User extends Model {}
@@ -39,9 +39,8 @@ module.exports = (sequelize) => {
                 notEmpty: {
                     msg: "Please provide an email address"
                 },
-                isEmail: true, // extra credit: valid email format check
-                unique: { // extra credit: unique constraint check
-                    msg: 'The email you entered already exists'
+                isEmail: {
+                    msg: "Please provide a valid email address"
                 }
             }
         },
@@ -53,19 +52,13 @@ module.exports = (sequelize) => {
                     msg: 'A password is required'
                 },
                 notEmpty: {
-                    msg: 'Please provide a passoword'
-                },
-                len: {
-                    args: [10, 15],
-                    msg: 'Choose a password that is between 10-15 characters long'
+                    msg: 'Please provide a password'
                 },
             },
             set(val) {
-                if (val === this.password) {
-                    const hashedPassword = bcrypt.hashSync(val, 10);
-                    this.setDataValue('password', hashedPassword);
-                }
-            }
+                const hashedPassword = bcrypt.hashSync(val, 10);
+                this.setDataValue('password', hashedPassword);
+            },
         }
     }, { sequelize });
 
