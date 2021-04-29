@@ -8,6 +8,7 @@ const { authenticateUser } = require('../middleware/auth-user'); // import authe
 const { Course } = require('../models');
 // import User model via index.js in models folder and access its property
 const { User } = require('../models');
+const user = require('../models/user');
 
 // construct a router instance
 const router = express.Router();
@@ -54,30 +55,46 @@ router.post('/courses', asyncHandler(async (req, res) => {
 }));
 
 // route updates corresponding Course
-router.put('/courses/:id', asyncHandler(async (req, res) => {
-    // update response and return in json
-    const updateCourse = await Course.findOne({ where: { id: req.params.id }}).save(
-        {
+router.put('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
+    const updateCourse = await Course.findOne({ where: { id: req.params.id }});
+    // if course belongs to current authorized user,
+    if (user.id === updateCourse.req.body.userId) {
+        updateCourse.save(
+            {
+            // update response and return in json
             title: req.body.title,
             description: req.body.description,
             userId: req.body.userId,
-        }
-    );
-    // log updated course
-    console.log(updateCourse);
-    // set status 204 and return no content
-    return res.status(204).end();
+            }
+        );
+        // log updated course
+        console.log(updateCourse);
+        // set status 204 and return no content
+        return res.status(204).end();
+    };
+    // } else {
+    //     // set status to 403
+    //     return res.status(403).end();
+    // };
 }));
 
 // route deletes corresponding Course
 router.delete('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
-    // delete response
     const deleteCourse = await Course.findOne({ where: { id: req.params.id }});
-    await deleteCourse.destroy();
-    // log deleted course
-    console.log(`${deleteCourse} has been deleted`);
-    // set status 204 and return no content
-    return res.status(204).end();
+    console.log(deleteCourse.dataValues.userId);
+    console.log(user.id);
+    // if course belongs to current authorized user,
+    // if (user.id === deleteCourse.dataValues.userId) {
+    //     // delete course
+    //     await deleteCourse.destroy();
+    //     // log deleted course
+    //     console.log(`${deleteCourse} has been deleted`);
+    //     // set status 204 and return no content
+    //     return res.status(204).end();
+    // } else { 
+    //     // set status to 403
+    //     return res.status(403).end();
+    // };
 }));
 
 module.exports = router;

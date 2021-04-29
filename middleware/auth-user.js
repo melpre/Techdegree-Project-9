@@ -10,6 +10,7 @@ const { User } = require('../models');
 
 exports.authenticateUser = async (req, res, next) => {
     let message; // store the message to display
+    let user;
 
     // Parse the user's credentials from the Authorization header.
     const credentials = auth(req);
@@ -19,7 +20,7 @@ exports.authenticateUser = async (req, res, next) => {
         // Attempt to retrieve the user from the data store
         // by their username (i.e. the user's "key"
         // from the Authorization header).
-        const user = await User.findOne({ where: {emailAddress: credentials.name} });
+        user = await User.findOne({ where: {emailAddress: credentials.name} });
 
         // If a user was successfully retrieved from the data store...
         // Use the bcrypt npm package to compare the user's password
@@ -48,7 +49,9 @@ exports.authenticateUser = async (req, res, next) => {
     if (message) {
         console.warn(message);
         // Return a response with a 401 Unauthorized HTTP status code.
-        res.status(401).json({ message: 'Access denied' });
+        // res.status(401).json({ message: 'Access denied' });
+        // Extra credit: return 403 HTTP status code
+        res.status(403);
     } else {
         // Or if user authentication succeeded...
         next ();
