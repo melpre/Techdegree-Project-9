@@ -8,7 +8,6 @@ const { authenticateUser } = require('../middleware/auth-user'); // import authe
 const { Course } = require('../models');
 // import User model via index.js in models folder and access its property
 const { User } = require('../models');
-const user = require('../models/user');
 
 // construct a router instance
 const router = express.Router();
