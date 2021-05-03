@@ -1,3 +1,5 @@
+// Extra Credit -- see lines 22 & 40, 79-93 and 99-110
+
 'use strict';
 
 const express = require('express');
@@ -16,10 +18,12 @@ const router = express.Router();
 /* COURSES ROUTES*/
 // route returns list of Courses and User that owns each Course
 router.get('/courses', asyncHandler(async (req, res) => {
-    const courses = await Course.findAll({ // how to retrieve current User's associated Courses?
+    const courses = await Course.findAll({
+        attributes: ['id', 'title', 'description', 'estimatedTime', 'materialsNeeded', 'userId'],
         include: [
             {
                 model: User,
+                attributes: ['id', 'firstName', 'lastName', 'emailAddress', 'password'],
                 as: 'instructor',
             }
         ],
@@ -31,7 +35,20 @@ router.get('/courses', asyncHandler(async (req, res) => {
 
 // route returns corresponding Course and User that owns Course
 router.get('/courses/:id', asyncHandler(async (req, res) => {
-    const course = await Course.findOne({ where: {id: req.params.id }});
+    const course = await Course.findOne({ 
+        where: {id: req.params.id },
+        attributes: ['id', 'title', 'description', 'estimatedTime', 'materialsNeeded', 'userId'],
+        include: [
+            {
+                model: User,
+                as: {
+                    'instructor': {
+                        attributes: ['id', 'firstName', 'lastName', 'emailAddress', 'password']
+                    }
+                }
+            }
+        ]
+    });
     // log corresponding course
     console.log(course);
     res.json({ course }).status(200);
@@ -47,7 +64,7 @@ router.post('/courses', asyncHandler(async (req, res) => {
     });
     // log new course
     console.log(newCourse);
-    // set the Location header to the URI for the newly created course
+    // set Location header to URI for newly created course
     res.set('Location', '/courses/:id');
     // set status 201 Created and end response
     return res.status(201).end();
@@ -59,22 +76,21 @@ router.put('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
     console.log(req.currentUser.id);
     console.log(updateCourse.userId);
     console.log(req.body);
-    return res.end();
     // if course belongs to current authorized user,
-    // if (req.currentUser.id === updateCourse.userId) {
-    //     // update response and return in json
-    //     // updateCourse.title = req.body.title;
-    //     // updateCourse.description = req.body.description;
-    //     // updateCourse.userId = req.body.userId;
-    //     await updateCourse.save(req.body);
-    //     // log updated course
-    //     console.log(updateCourse.toJSON());
-    //     // set status 204 and return no content
-    //     return res.status(204).end();
-    // } else {
-    //     // set status to 403
-    //     return res.status(403).end();
-    // };
+    if (req.currentUser.id === updateCourse.userId) {
+        // update response and return in json
+        updateCourse.title = req.body.title;
+        updateCourse.description = req.body.description;
+        updateCourse.userId = req.body.userId;
+        await updateCourse.update(req.body);
+        // log updated course
+        console.log(updateCourse.toJSON());
+        // set status 204 and return no content
+        return res.status(204).end();
+    } else {
+        // set status to 403
+        return res.status(403).end();
+    };
 }));
 
 // route deletes corresponding Course

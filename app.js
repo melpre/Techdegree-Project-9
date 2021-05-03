@@ -1,3 +1,13 @@
+/******************************************
+Treehouse FSJS Techdegree:
+project 9 - REST API with Express
+by Melissa Preece
+I am aiming for the grade Exceeds Expectations but will accept Meets Expectations as well.
+
+// Extra Credit:
+- See files courseRoutes.js (#3), userRoutes.js (#2), async-handler.js (#2), user.js (#1)
+******************************************/
+
 'use strict';
 
 // load modules
@@ -58,7 +68,7 @@ app.set('port', process.env.PORT || 5000);
   try {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
-  } catch (error) {
+  } catch(error) {
     console.error('Unable to connect to the database:', error);
   }
 })();
