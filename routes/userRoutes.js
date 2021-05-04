@@ -17,7 +17,8 @@ const router = express.Router();
 // route that returns authenticated User
 router.get('/users', authenticateUser, asyncHandler(async (req, res) => {
     const user = req.currentUser;
-    return res.json({ 
+    
+    res.json({ 
         email: user.emailAddress,
         firstName: user.firstName,
         lastName: user.lastName 

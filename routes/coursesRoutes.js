@@ -41,13 +41,10 @@ router.get('/courses/:id', asyncHandler(async (req, res) => {
         include: [
             {
                 model: User,
-                as: {
-                    'instructor': {
-                        attributes: ['id', 'firstName', 'lastName', 'emailAddress', 'password']
-                    }
-                }
+                attributes: ['id', 'firstName', 'lastName', 'emailAddress', 'password'],
+                as: 'instructor',
             }
-        ]
+        ],
     });
     // log corresponding course
     console.log(course);
@@ -55,7 +52,7 @@ router.get('/courses/:id', asyncHandler(async (req, res) => {
 }));
 
 // route creates new Course
-router.post('/courses', asyncHandler(async (req, res) => {
+router.post('/courses', authenticateUser, asyncHandler(async (req, res) => {
     // get created course from request body 
     const newCourse = await Course.create({ 
         title: req.body.title,
@@ -65,7 +62,8 @@ router.post('/courses', asyncHandler(async (req, res) => {
     // log new course
     console.log(newCourse);
     // set Location header to URI for newly created course
-    res.set('Location', '/courses/:id');
+    res.location('/courses/' + ':id');
+    console.log(res.get('location')); // should be /courses/:id
     // set status 201 Created and end response
     return res.status(201).end();
 }));

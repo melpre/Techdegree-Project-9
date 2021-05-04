@@ -12,7 +12,6 @@ const { User } = require('../models');
 
 exports.authenticateUser = async (req, res, next) => {
     let message; // store the message to display
-    let user;
 
     // parse user's credentials from Authorization header
     const credentials = auth(req);
@@ -20,7 +19,7 @@ exports.authenticateUser = async (req, res, next) => {
     // if user's credentials are available...
     if (credentials) {
         // retrieve user from data store by username (i.e. user's "key" from Authorization header)
-        user = await User.findOne({ where: {emailAddress: credentials.name} });
+        const user = await User.findOne({ where: {emailAddress: credentials.name} });
 
         // if user was successfully retrieved from data store...
         if (user) {
@@ -42,7 +41,7 @@ exports.authenticateUser = async (req, res, next) => {
         }
     } else {
         message = 'Auth header not found';
-    }
+    };
 
     // if user authentication failed...
     if (message) {
@@ -51,6 +50,9 @@ exports.authenticateUser = async (req, res, next) => {
         // res.status(401).json({ message: 'Access denied' });
 
         // extra credit: return 403 HTTP status code
-        return res.status(403);
+        res.status(403).end();
+    } else {
+        // or if user authentication succeeded, call next() method
+        next();
     };
 };
