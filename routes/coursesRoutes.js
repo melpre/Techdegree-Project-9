@@ -23,7 +23,7 @@ router.get('/courses', asyncHandler(async (req, res) => {
         include: [
             {
                 model: User,
-                attributes: ['id', 'firstName', 'lastName', 'emailAddress', 'password'],
+                attributes: ['id', 'firstName', 'lastName', 'emailAddress'],
                 as: 'instructor',
             }
         ],
@@ -41,7 +41,7 @@ router.get('/courses/:id', asyncHandler(async (req, res) => {
         include: [
             {
                 model: User,
-                attributes: ['id', 'firstName', 'lastName', 'emailAddress', 'password'],
+                attributes: ['id', 'firstName', 'lastName', 'emailAddress'],
                 as: 'instructor',
             }
         ],
@@ -62,8 +62,9 @@ router.post('/courses', authenticateUser, asyncHandler(async (req, res) => {
     // log new course
     console.log(newCourse);
     // set Location header to URI for newly created course
-    res.location('/courses/' + ':id');
-    console.log(res.get('location')); // should be /courses/:id
+    res.location(`/courses/${newCourse.id}`);
+    // log location header
+    console.log(res.get('location'));
     // set status 201 Created and end response
     return res.status(201).end();
 }));

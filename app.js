@@ -5,7 +5,7 @@ by Melissa Preece
 I am aiming for the grade Exceeds Expectations but will accept Meets Expectations as well.
 
 // Extra Credit:
-- See files courseRoutes.js (#3), userRoutes.js (#2), async-handler.js (#2), user.js (#1)
+- See files coursesRoutes.js (#3), userRoutes.js (#2), async-handler.js (#2), user.js (#1), auth-user.js (#3)
 ******************************************/
 
 'use strict';

@@ -47,10 +47,7 @@ exports.authenticateUser = async (req, res, next) => {
     if (message) {
         console.warn(message);
         // return a response with a 401 Unauthorized HTTP status code
-        // res.status(401).json({ message: 'Access denied' });
-
-        // extra credit: return 403 HTTP status code
-        res.status(403).end();
+        res.status(401).json({ message: 'Access denied' });
     } else {
         // or if user authentication succeeded, call next() method
         next();
